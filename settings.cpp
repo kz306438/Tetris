@@ -186,6 +186,7 @@ void setupGlobalOptionsButton()
                 global::softDropKey = VK_DOWN;
                 global::hardDropKey = 32;
                 global::holdKey = 'C';
+                updateImageFigures();
                 setupGlobalOptionsButton();
                 showGlobalOptionsObject();
             }

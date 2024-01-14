@@ -440,7 +440,7 @@ void Game::run()
 
 	setupGame();
 
-	Timer t, t1;
+	Timer t;
 	double time = 0;
 	setupInputHandling();
 	while (!isDead() && !global::stopGame)
@@ -473,6 +473,21 @@ void Game::run()
 			}
 			goDown();
 			t.reset();
+		}
+		if (GetAsyncKeyState(27) & 0x8000)
+		{
+			gameMusic.pause();
+			int temp = pauseMenu();
+			if (temp == 1)
+			{
+				system("cls");
+				showGameObject();
+				gameMusic.play();
+				pauseButton.allowChanges();
+				pauseButton.show();
+				setupInputHandling();
+			}
+			gameMusic.setVolume(static_cast<float>(global::soundVolume));
 		}
 		if (GetAsyncKeyState(global::softDropKey) & 0x8000) {
 			figureSpeed = 40;
