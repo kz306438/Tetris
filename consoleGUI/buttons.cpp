@@ -340,14 +340,14 @@ void SliderButton::handleKeyboardEvent(int key)
 	}
 }
 
-StandartButton::StandartButton(int buttonWidth, int buttonHeight, std::string buttonName, int buttonPositionX, int buttonPositionY)
+PushButton::PushButton(int buttonWidth, int buttonHeight, std::string buttonName, int buttonPositionX, int buttonPositionY)
 	: buttonWidth(buttonWidth), buttonHeight(buttonHeight),
 	buttonName(buttonName), buttonPositionX(buttonPositionX), buttonPositionY(buttonPositionY)
 {
 	buttonFill();
 }
 
-void StandartButton::buttonFill()
+void PushButton::buttonFill()
 {
 	arr.resize(buttonHeight);
 	for (int i = 0; i < buttonHeight; i++)
@@ -388,7 +388,7 @@ void StandartButton::buttonFill()
 	isChanged = true;
 }
 
-void StandartButton::buttonDefault()
+void PushButton::buttonDefault()
 {
 	if(isPressed == true)isChanged = true;
 	isPressed = false;
@@ -408,7 +408,7 @@ void StandartButton::buttonDefault()
 	arr[buttonHeight - 1][buttonWidth - 1] = bottomRightCorner;
 }
 
-void StandartButton::buttonPressed()
+void PushButton::buttonPressed()
 {
 	if(isPressed != true)isChanged = true;
 	isPressed = true;
@@ -424,13 +424,13 @@ void StandartButton::buttonPressed()
 	}
 }
 
-void StandartButton::setName(const std::string& newName)
+void PushButton::setName(const std::string& newName)
 {
 	this->buttonName = newName;
 	buttonFill();
 }
 
-void StandartButton::show()
+void PushButton::show()
 {
 	if(isChanged)
 	{
@@ -465,26 +465,26 @@ void StandartButton::show()
 
 }
 
-void StandartButton::changePosition(int positionX, int positionY)
+void PushButton::changePosition(int positionX, int positionY)
 {
 	this->buttonPositionX = positionX;
 	this->buttonPositionY = positionY;
 	isChanged = true;
 }
 
-void StandartButton::setBackgroundColor(ConsoleColor newColor)
+void PushButton::setBackgroundColor(ConsoleColor newColor)
 {
 	this->backgroundColor = newColor;
 	isChanged = true;
 }
 
-void StandartButton::setForegroundColor(ConsoleColor newColor)
+void PushButton::setForegroundColor(ConsoleColor newColor)
 {
 	this->foregroundColor = newColor;
 	isChanged = true;
 }
 
-void StandartButton::setTexture(char topLeft, char topRight, char bottomLeft, char bottomRight, char horizontal, char vertical) {
+void PushButton::setTexture(char topLeft, char topRight, char bottomLeft, char bottomRight, char horizontal, char vertical) {
 	topLeftCorner = topLeft;
 	topRightCorner = topRight;
 	bottomLeftCorner = bottomLeft;
@@ -495,7 +495,7 @@ void StandartButton::setTexture(char topLeft, char topRight, char bottomLeft, ch
 	show();
 }
 
-void StandartButton::handleMouseEvent(COORD mousePos)
+void PushButton::handleMouseEvent(COORD mousePos)
 {
 	if (mousePos.X >= buttonPositionX && mousePos.X < buttonPositionX + buttonWidth &&
 		mousePos.Y >= buttonPositionY && mousePos.Y < buttonPositionY + buttonHeight)
@@ -512,7 +512,7 @@ void StandartButton::handleMouseEvent(COORD mousePos)
 	}
 }
 
-void StandartButton::handleKeyboardEvent(int key)
+void PushButton::handleKeyboardEvent(int key)
 {
 	if (key == 13)
 	{

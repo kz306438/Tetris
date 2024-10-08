@@ -1,82 +1,56 @@
 #pragma once
-#include "consoleGUI/colors.h"
-#include <vector>
-#include "figure.h"
-#include "Timer.h"
-#include "FileManager.h"
 
-struct Cell
+#include <memory>
+#include "Menu/Menu.h"
+#include "Menu/MainMenu.h"
+#include "Menu/OptionsMenu.h"
+#include "Menu/SplashScreen.h"
+#include "Session/Session.h"
+#include "Session/SingleSession.h"
+#include "Session/AISession.h"
+
+namespace Tetris
 {
-	Cell() = default;
-	Cell(bool state, ConsoleColor color) :
-		state(state), color(color) {}
-	ConsoleColor color;
-	bool state;
-};
-class Game
-{
-public:
-	Game()
+	class SplashScreen;
+
+	class Game
 	{
-		Cell defaultCell (false, Black);
-		MAP.resize(Height, std::vector<Cell>(Width, defaultCell));
-	}
+	public:
+		Game();
 
-	int numberActiveFigure(Figure* myFigure);
+		void run();
+		void finishGame();
 
-	void printFigureImage(Figure* myFigure, int posX, int posY);
+		void update(float ts);
+		void render();
 
-	void controlFigure();
+		template<typename T>
+		void SetMenu()
+		{
+			m_Menu = std::make_shared<T>(*this);
+			isChange = true;
+		}
 
-	bool isFallen();
+		template<>
+		void SetMenu<std::nullptr_t>()
+		{
+			m_Menu = nullptr;
+			isChange = true;
+		}
 
-	void updateMap();
+		template <typename T>
+		void SetSession()
+		{
+			m_Session = std::make_shared<T>(*this);
+		}
 
-	void goDown();
+	public:
+		bool isChange = false;
 
-	void shaffleShapes();
+	private:
+		std::shared_ptr<Menu> m_Menu;
+		std::shared_ptr<Session> m_Session;
 
-	Figure* getNextFigure();
+	};
 
-	void deadLine(int y);
-
-	void printData();
-
-	void checkLine();
-
-	bool isDead();
-
-	void setupGame();
-
-	void updateNextWindow();
-	
-	void hold();
-	
-	void gameOver();
-
-	void showGameObject();
-
-	void run();
-private:
-	int Height = 20;
-	int Width = 10;
-	int mapPositionX = 26;
-	int mapPositionY = 6;
-	int spawnPositionX = mapPositionX + Width - 2;
-	int spawnPositionY = mapPositionY;
-	int figureSpeed = 1010;
-	int score = global::score;
-	int level = 1;
-	int lines = 0;
-	Figure* myFigure = nullptr;
-	Figure* nextFigure = nullptr;
-	Figure* holdFigure = nullptr;
-	std::vector<Figure*> bag;
-	Timer gameMusicTimer;
-	Timer delayMoveRight;
-	Timer delayMoveLeft;
-	Timer delayRotate;
-	bool isCanUseHold = true;
-	std::vector<std::vector<Cell>> MAP;
-};
-
+} // Tetris

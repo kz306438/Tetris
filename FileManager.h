@@ -1,28 +1,22 @@
 #pragma once
-#include <iostream>
-#include <fstream>
 #include <string>
+#include <fstream>
+#include <iostream>
 
 class FileManager {
 public:
-    FileManager() = default;
-
-    FileManager(const std::string& filename) : filename_(filename) {}
+    static FileManager& getInstance(const std::string& filename = "default.txt");
 
     template <typename T>
     void saveVariable(const std::string& variableName, const T& variable) {
-        // Создаем временный файл для записи
         std::ofstream tempFile("temp.txt");
 
         if (tempFile.is_open()) {
-            // Копируем старые переменные в новый файл, пропуская ту, которую мы хотим перезаписать
             std::ifstream inputFile(filename_);
             std::string name;
             while (inputFile >> name) {
                 if (name == variableName) {
-
                     inputFile.ignore(100, '\n');
-
                 }
                 else {
                     tempFile << name << " ";
@@ -33,12 +27,9 @@ public:
             }
             inputFile.close();
 
-            // Записываем новую переменную
             tempFile << variableName << " " << variable << std::endl;
-
             tempFile.close();
 
-            // Заменяем старый файл новым
             std::remove(filename_.c_str());
             if (std::rename("temp.txt", filename_.c_str()) != 0) {
                 std::cerr << "Error renaming temp file to " << filename_ << std::endl;
@@ -50,10 +41,10 @@ public:
         }
     }
 
+
     template <typename T>
     bool loadVariable(const std::string& variableName, T& variable) {
         if (!verifyFileIntegrity()) {
-            //std::cerr << "File integrity check failed. The file may be tampered with." << std::endl;
             return false;
         }
 
@@ -63,7 +54,6 @@ public:
             while (file >> name) {
                 if (name == variableName) {
                     if constexpr (std::is_same_v<T, std::string>) {
-
                         std::getline(file, variable);
                     }
                     else {
@@ -81,68 +71,18 @@ public:
         return false;
     }
 
-    bool isEmpty() {
-        std::ifstream file(filename_);
-        return !file || file.peek() == std::ifstream::traits_type::eof();
-    }
+
+    bool isEmpty();
+
 private:
+    FileManager() = default;
+    FileManager(const std::string& filename);
+
+    FileManager(const FileManager&) = delete;
+    FileManager& operator=(const FileManager&) = delete;
+
     std::string filename_;
 
-    void updateFileHash() {
-        std::ifstream file(filename_, std::ios::binary);
-        if (file.is_open()) {
-            char byte;
-            unsigned char hash = 0;
-
-            while (file.get(byte)) {
-                hash ^= static_cast<unsigned char>(byte);
-            }
-
-            file.close();
-
-            // Сохраняем хеш в файл
-            std::ofstream hashFile((filename_ + ".hash").c_str(), std::ios::binary);
-            if (hashFile.is_open()) {
-                hashFile.put(hash);
-                hashFile.close();
-            }
-            else {
-                std::cerr << "Unable to open hash file for saving." << std::endl;
-            }
-        }
-        else {
-            std::cerr << "Unable to open file for hash calculation." << std::endl;
-        }
-    }
-
-    bool verifyFileIntegrity() {
-        std::ifstream hashFile((filename_ + ".hash").c_str(), std::ios::binary);
-        if (hashFile.is_open()) {
-            char storedHash;
-            hashFile.get(storedHash);
-            hashFile.close();
-
-            unsigned char currentHash = 0;
-            std::ifstream file(filename_, std::ios::binary);
-
-            if (file.is_open()) {
-                char byte;
-                while (file.get(byte)) {
-                    currentHash ^= static_cast<unsigned char>(byte);
-                }
-
-                file.close();
-
-                return storedHash == currentHash;
-            }
-            else {
-                std::cerr << "Unable to open file for hash verification." << std::endl;
-            }
-        }
-        else {
-            std::cerr << "Unable to open hash file for verification." << std::endl;
-        }
-
-        return false;
-    }
+    void updateFileHash();
+    bool verifyFileIntegrity();
 };

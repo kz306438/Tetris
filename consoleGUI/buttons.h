@@ -10,7 +10,6 @@
 #include "Object.h"
 
 namespace {
-	// ќбъ€вл€ем переменные как статические, чтобы они были видны только внутри данного файла
 	static HANDLE hin = GetStdHandle(STD_INPUT_HANDLE);
 	static INPUT_RECORD InputRecord;
 	static DWORD Events;
@@ -28,6 +27,7 @@ namespace {
 class Button : public Object {
 public:
 	void allowChanges();
+
 protected:
 	virtual void buttonFill() = 0;
 	virtual void buttonDefault() = 0;
@@ -68,7 +68,6 @@ public:
 	void changePosition(int positionX, int positionY) override;
 
 	void setBackgroundColor(ConsoleColor newColor) override;
-
 	void setForegroundColor(ConsoleColor newColor) override;
 
 	void setValue(int value);
@@ -98,10 +97,10 @@ private:
 	void handleKeyboardEvent(int key) override;
 };
 
-class StandartButton : public Button {
+class PushButton : public Button {
 public:
-	StandartButton() = default;
-	StandartButton(int buttonWidth, int buttonHeight, std::string buttonName, int buttonPositionX, int buttonPositionY);
+	PushButton() = default;
+	PushButton(int buttonWidth, int buttonHeight, std::string buttonName, int buttonPositionX, int buttonPositionY);
 
 	template <typename Function>
 	void connect(Function&& func) {
