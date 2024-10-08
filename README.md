@@ -9,3 +9,14 @@ This project is a console-based Tetris game created using a custom GUI library t
 - **Music and Sound**: Enjoy background music that enhances the gaming atmosphere, fully integrated into the console environment.
 - **Multiple Menus**: Navigate through a variety of menus that offer different gameplay options and settings, making the game highly customizable.
 - **Responsive Controls**: Smooth and responsive controls for an optimal Tetris experience in the console.
+
+## How to Play
+
+- Use the arrow keys to move the tetrominoes.
+- Rotate the pieces with the designated keys (customizable in the settings).
+- Clear rows to score points and avoid filling up the screen.
+- Try the AI ​​game mode.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
